@@ -5,7 +5,7 @@ public class JdbcDemo{
   public static void main(String args[]){  
   try{  
     Class.forName("com.mysql.cj.jdbc.Driver");  
-    Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/javajdbc?","vijayasri","Vijaya@02");
+    Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/javajdbc?","root","");
     Statement stmt=con.createStatement();  
     ResultSet rs=stmt.executeQuery("select FirstName from bloodbank where ID=1");  
      rs.next();
