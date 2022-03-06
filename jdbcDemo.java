@@ -5,10 +5,11 @@ import java.util.*;
 
 
 public class JdbcDemo {
+	//main program
 	public static void main(String args[])throws Exception{
 		System.out.println("-------Welcome to the Blood Bank System--------");
 		System.out.println("Select Any required action from the List");
-		System.out.println("1.Enter the details of the donor\n2.Edit the details of the donor\n3.");
+		System.out.println("1.Enter the details of the donor\n2.Update the details of the donor\n3.Display list of donors\n4.Delete a donor\n5.Display the Availability of Blood\n6.Edit Expiry Details of the Blood\n7.Increase the Quantity of Blood Available\n8.Decrease the Quantity of Blood Available");
 		
 		Scanner sc=new Scanner(System.in);
 		
@@ -22,40 +23,64 @@ public class JdbcDemo {
 		
 		switch(sc.nextInt()) {
 		case 1:
-			System.out.println("Enter the Details of the Donor:");
-			System.out.print("Enter the First Name:");
-			String firstName=sc.next();
-			System.out.print("Enter the Last Name:");
-			String lastName=sc.next();
-			System.out.print("Enter the Blood Group:");
-			String bloodGroup=sc.next();
-			System.out.print("Enter the Age:");
-			int age=sc.nextInt();
-			System.out.print("Enter the Gender:");
-			String gender=sc.next();
-			System.out.print("Enter the Address:");
-			String address=sc.next();
-			System.out.print("Enter the Phone Number:");
-			String phoneNo=sc.next();
-			System.out.print("Enter the Date of Last Donation(YYYY-MM-DD):");
-			String dateOfLastDonation=sc.next();
-			String query="insert into BloodBank(FirstName,LastName,BloodGroup,Age,Gender,Address,PhoneNumber,DateOfLastDonation) values(?,?,?,?,?,?,?,?);";
-			PreparedStatement pstmt = con1.prepareStatement(query); 
-			pstmt.setString(1,firstName);
-			pstmt.setString(2,lastName);
-			pstmt.setString(3,bloodGroup);
-			pstmt.setInt(4,age);
-			pstmt.setString(5,gender);
-			pstmt.setString(6,address);
-			pstmt.setString(7,phoneNo);
-			pstmt.setString(8,dateOfLastDonation);
-			pstmt.executeUpdate();
-			System.out.println("Inserted"); 
+			DonorDetails(con1); 
+			break;
+		case 2:
+			EditDonorDetails(con1);
+			break;
+		case 3:
+			DisplayDonorDetails(con1);
+			break;
+		case 4:
+			DeleteDonor(con1,sc);
+			break;
+		case 5:
+			DisplayBloodAvailability(con1);
+			break;
+		case 6:
+			EditExpiryDate(con1,sc);
+			break;
+		case 7:
+			EditBloodQuantityInc(con1,sc);
+			break;
+		case 8:
+			EditBloodQuantityDec(con1,sc);
 			break;
 		}
+		
 	    con1.close();
 	    sc.close();
 			
 	}
+	public static void EditBloodQuantityInc(Connection con1, Scanner sc)throws Exception {
+		System.out.println("BloodID\nA+ve = 1\nA-ve = 2\nB+ve = 3\nB-ve = 4\nO+ve = 5\nO-ve = 6\nAB+ve = 7\nAB-ve = 8");
+		System.out.print("Enter the BloodId:");
+		int id=sc.nextInt();
+		System.out.print("Enter the units of blood to be Increased:");
+		int units=sc.nextInt();
+		String query="Update BloodAvailable SET BloodQuantity=BloodQuantity+? Where BloodID=?;";
+		PreparedStatement pstmt = con1.prepareStatement(query);
+		pstmt.setInt(1, units);
+		pstmt.setInt(2, id);
+		pstmt.executeUpdate();
+		System.out.println("Successfully Updated the Blood Quantity");
+		
+	}
 
+	public static void EditBloodQuantityDec(Connection con1, Scanner sc)throws Exception {
+		System.out.println("BloodID\nA+ve = 1\nA-ve = 2\nB+ve = 3\nB-ve = 4\nO+ve = 5\nO-ve = 6\nAB+ve = 7\nAB-ve = 8");
+		System.out.println("Enter the BloodId:");
+		int id=sc.nextInt();
+		System.out.print("Enter the units of blood to be Decreased:");
+		int units=sc.nextInt();
+		String query="Update BloodAvailable SET BloodQuantity=BloodQuantity-? Where BloodID=?;";
+		PreparedStatement pstmt = con1.prepareStatement(query);
+		pstmt.setInt(1, units);
+		pstmt.setInt(2, id);
+		pstmt.executeUpdate();
+		System.out.println("Successfully Updated the Blood Quantity");
+		
+		
+	}
+	
 }
